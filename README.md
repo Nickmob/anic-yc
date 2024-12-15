@@ -107,7 +107,7 @@ kubectl apply -f http01-clusterissuer.yaml
 
 ## Запускаем Ingress и тестовое приложение
 
-Нужно прописать действующий домен, поставить его вместо otus-kube.mtdlb.ru.
+Нужно прописать действующий домен, поставить его вместо otus-kube.mtdlb.ru. Внешний IP находим в панели Облака: Managed Service for Kubernetes/Кластеры/otus/Сеть (внешний IP-адрес). 
 
 ```bash
 kubectl apply -f http01-clusterissuer.yaml
