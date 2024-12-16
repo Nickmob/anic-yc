@@ -68,6 +68,11 @@ helm package .
 helm install anic anic-0.5.0.tgz
 ```
 
+Обновление чарта
+```bash
+helm upgrade my-release anic/anic –version 0.5.0
+```
+
 ## Запускаем менеджер сертификатов
 
 
@@ -108,10 +113,6 @@ kubectl apply -f http01-clusterissuer.yaml
 ## Запускаем Ingress и тестовое приложение
 
 Нужно прописать действующий домен, поставить его вместо otus-kube.mtdlb.ru. Внешний IP находим в панели Облака: Managed Service for Kubernetes/Кластеры/otus/Сеть (внешний IP-адрес). 
-
-```bash
-kubectl apply -f http01-clusterissuer.yaml
-```
 
 ```yaml
 
@@ -204,3 +205,14 @@ kubectl exec anic-64ff957589-jlg7s -- angie -T
 ```bash
 kubectl delete -f app-angie.yaml
 ```
+## Запуск проксирования TCP
+
+Для начала нужно задеплоить сервис MySQL.
+Пароль для root указываем в mysq-seceret.yaml. Постоянный volume определяется в mysql-storage.yaml.
+
+```bash
+kubectl apply -f mysql-secret.yaml
+kubectl apply -f mysql-storage.yaml
+kubectl apply -f mysql-deployment.yaml
+```
+

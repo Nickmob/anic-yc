@@ -1,0 +1,14 @@
+apiVersion: k8s.angie.software/v1alpha1
+kind: TransportServer
+metadata:
+  name: mysql-tcp
+spec:
+  listener:
+    name: mysql-tcp
+    protocol: TCP
+  upstreams:
+  - name: mysql
+    service: mysql
+    port: 3306
+  action:
+    pass: mysql
