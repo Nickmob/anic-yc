@@ -64,13 +64,12 @@ enableCertManager: true
 Собираем чарт и устанавливаем.
 
 ```
-helm package .
-helm install anic anic-0.5.0.tgz
+helm install anic .
 ```
-
 Обновление чарта
+
 ```bash
-helm upgrade my-release anic/anic –version 0.5.0
+helm upgrade anic .
 ```
 
 ## Запускаем менеджер сертификатов
@@ -205,14 +204,55 @@ kubectl exec anic-64ff957589-jlg7s -- angie -T
 ```bash
 kubectl delete -f app-angie.yaml
 ```
-## Запуск проксирования TCP
+## Запуск проксирования TCP (beta)
 
+Требует включения globalConfiguration в values.yaml чарта. За счет него мы определеляем listener.
+
+Сначала устанавливаем чарт с выключенным параметром, а затем с включенным.
+Сначала:
+
+```yaml
+  globalConfiguration:
+    ## Creates the GlobalConfiguration custom resource. Requires controller.enableCustomResources.
+    create: false
+
+```
+Потом: helm upgrade anic .
+
+```yaml
+  globalConfiguration:
+    ## Creates the GlobalConfiguration custom resource. Requires controller.enableCustomResources.
+    create: true
+
+    ## The spec of the GlobalConfiguration for defining the global configuration parameters of the Ingress Controller.
+    spec:
+      listeners:
+      # - name: dns-udp
+      #   port: 5353
+      #   protocol: UDP
+      - name: mysql-tcp
+        port: 13306
+        protocol: TCP
+
+```
 Для начала нужно задеплоить сервис MySQL.
 Пароль для root указываем в mysq-seceret.yaml. Постоянный volume определяется в mysql-storage.yaml.
+
+*Пока конфигурация не завершена*.
 
 ```bash
 kubectl apply -f mysql-secret.yaml
 kubectl apply -f mysql-storage.yaml
 kubectl apply -f mysql-deployment.yaml
+kubectl apply -f mysql-service.yaml
+kubectl apply -f anic-mysql.yaml
 ```
 
+Смотрим статус объектов:
+
+```bash
+kubectl get svc
+kubectl describe gc
+kubectl describe ts mysql-tcp
+kubectl describe service anic
+```
