@@ -25,6 +25,8 @@ yc managed-kubernetes cluster get-credentials otus --external
 kubectl config view
 kubectl get nodes
 kubectl get svc
+kubectl get secret
+
 ```
 
 ## Получаем доступ к образу ANIC
@@ -32,7 +34,7 @@ kubectl get svc
 Создаём docker-секрет. Сохраняем путь к файлу с секретом для следующей команды.
 
 ```bash
-docker login -u=<login> -p=<password> anic.docker.angie.software
+docker login -u=<login> -p=<password> anic-lic.docker.angie.software
 ```
 Создаём секрет для kubernetes из секрета docker
 
@@ -76,7 +78,7 @@ helm upgrade anic .
 
 
 ```bash
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.1/cert-manager.yaml
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.18.0/cert-manager.yaml
 ```
 
 Должно быть три пода с готовностью 1/1 и Running
@@ -175,10 +177,54 @@ spec:
         - containerPort: 80
 ```
 
+Добавляем секрет - лицензию Angie PRO
+
+```bash
+cat license.pem | base64 -w0
+
+```
+
+Создаём объект секрета:
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: angie-pro-secret
+  namespace: default
+data:
+  angiePro.license: <base64_текст_из предыдущей команды>
+```
+
+Применяем секрет
+
+
+```bash
+kubectl apply -f angie-licence.yaml 
+
+```
 Запускаем всё сразу:
 ```bash
 kubectl apply -f app-angie.yaml
 ```
+
+Создаём конфиг для Angie и примеряем
+
+```bash
+cat angie-config.yaml
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: anic
+  namespace: default
+data:
+  worker-connections: "250"
+
+kubectl apply -f angie-config.yaml
+
+```
+
+Важно: в YC жесткий лимит на количество балансировщиков, так что идём в Network Load Balancer/Балансировщики и удаляем лишние.
 
 Проверяем статус сертификата и сектера (в котором он содержится)
 

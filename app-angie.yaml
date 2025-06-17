@@ -9,10 +9,10 @@ spec:
   ingressClassName: angie
   tls:
     - hosts:
-      - otus-kube.mtdlb.ru
+      - otus-k8s.mtdlb.ru
       secretName: domain-name-secret
   rules:
-    - host: otus-kube.mtdlb.ru
+    - host: otus-k8s.mtdlb.ru
       http:
         paths:
         - path: /
