@@ -19,6 +19,14 @@ yc init
 ```bash
 yc managed-kubernetes cluster get-credentials otus --external
 ```
+
+Переключение между кластерами, проверка
+
+```bash
+kubectl config get-contexts
+kubectl config use-context <context_name>
+```
+
 Посмотрим ноды и конфигурацию кластера
 
 ```bash
@@ -113,7 +121,7 @@ kubectl apply -f http01-clusterissuer.yaml
 
 ## Запускаем Ingress и тестовое приложение
 
-Нужно прописать действующий домен, поставить его вместо otus-kube.mtdlb.ru. Внешний IP находим в панели Облака: Managed Service for Kubernetes/Кластеры/otus/Сеть (внешний IP-адрес). 
+Нужно прописать действующий домен, поставить его вместо otus-k8s.mtdlb.ru. Внешний IP находим в панели Облака: Managed Service for Kubernetes/Кластеры/otus/Сеть (внешний IP-адрес). 
 
 ```yaml
 
