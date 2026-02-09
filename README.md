@@ -64,6 +64,9 @@ cd anic-helm-charts/anic/
 Редактируем values.yaml. Ставим:
 
 ```yaml
+angieProLicense: "default/angie-pro-secret"
+...
+angiePro: true
 ...
 imagePullSecretName: "regcred"
 ...
@@ -234,7 +237,9 @@ kubectl apply -f angie-config.yaml
 
 Важно: в YC жесткий лимит на количество балансировщиков, так что идём в Network Load Balancer/Балансировщики и удаляем лишние.
 
-Проверяем статус сертификата и сектера (в котором он содержится)
+Теперь нужно создать домен, указанный в angie-config.yaml c указанием EXTERNAL-IP из kubectl get svc (либо из веб-панели найти в разделе Сеть).
+
+Проверяем статус сертификата и секрета (в котором он содержится)
 
 ```bash
 kubectl describe certificate domain-name-secret
