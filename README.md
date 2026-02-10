@@ -254,6 +254,12 @@ kubectl describe secret domain-name-secret
 
 ## Проверка работы
 
+Проверяем наличие объекта ingress
+
+```
+kubectl get ingress
+```
+
 Заходим по https://otus-kube.mtdlb.ru
 
 Если есть проблемы, смотрим логи подов.
