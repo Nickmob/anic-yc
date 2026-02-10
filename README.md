@@ -20,6 +20,12 @@ yc init
 yc managed-kubernetes cluster get-credentials otus --external
 ```
 
+Просмотр списка кластеров
+
+```
+yc managed-kubernetes cluster list
+```
+
 Переключение между кластерами, проверка
 
 ```bash
